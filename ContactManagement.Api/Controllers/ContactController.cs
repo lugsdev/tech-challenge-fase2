@@ -4,10 +4,7 @@ using ContactManagement.Domain.Entities;
 using ContactManagement.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-<<<<<<< Updated upstream
-=======
-using ContactManagement.Api.Loggin;
->>>>>>> Stashed changes
+
 
 namespace ContactManagement.Api.Controllers;
 
