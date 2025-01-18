@@ -6,10 +6,10 @@ RUN useradd -m app
 USER app
 WORKDIR /app
 
-ENV PORT=8080
-ENV ASPNETCORE_URLS=https://+:8080
+ENV PORT=8081
+ENV ASPNETCORE_URLS=https://+:8081
 
-EXPOSE 8080
+EXPOSE 8081
 
 
 # Esta fase é usada para compilar o projeto de serviço
