@@ -12,6 +12,11 @@ builder.Services
 
 builder.AddCustomLogging();
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+	options.ListenAnyIP(8080);
+});
+
 var app = builder.Build();
 
 app.UseApiConfiguration(app.Environment);
