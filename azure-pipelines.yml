@@ -4,7 +4,7 @@ trigger:
 variables:
   buildConfiguration: 'Release'
   realeaseBranchName: 'release'
-  wwwrootDir: 'ContactManagement.Api'
+  #wwwrootDir: 'Tech Challenge - Fase 2'
 
 pool: self-hosted
 
@@ -23,7 +23,7 @@ stages:
           version: '8.x'
 
       - script: 'echo "$(Build.DefinitionName), $(Build.BuildId), $(build.BuildNumber)" > buildinfo.txt'
-        workingDirectory: '$(wwwrootDir)'
+        #workingDirectory: '$(wwwrootDir)'
 
       - task: DotNetCoreCLI@2
         displayName: 'Restore project'
@@ -65,9 +65,17 @@ stages:
              steps:
                - download: current
                  artifact: drop
-               - script: |
-                   echo O deploy em Development foi realizado com sucesso.
-                 displayName: 'Deploy into Development'
+
+              #  - task: AzureCLI@2
+              #    inputs:
+              #     azureSubscription: 'Azure subscription 1(fbc3ecca-50c5-4e82-a364-1a17cd39e809)'
+              #     scriptType: 'ps'
+              #     scriptLocation: 'inlineScript'
+              #     inlineScript: 'az container create -g $(resourceGroup) --name $(appName) --image $(acrLoginServer)/$(acrName):$(Build.BuildId) --cpu 1 --memory 1 --registry-login-server $(acrLoginServer) --registry-username $(acrName) --registry-password $(acrPassword) --ports 80'
+
+              #  - script: |
+              #      echo O deploy em Development foi realizado com sucesso.
+              #    displayName: 'Deploy into Development'
                 
   - stage: 'Staging'
     displayName: 'Deploy Staging enviroment'
