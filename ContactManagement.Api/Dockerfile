@@ -5,8 +5,11 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 RUN useradd -m app
 USER app
 WORKDIR /app
+
+ENV PORT=8080
+ENV ASPNETCORE_URLS=https://+:8080
+
 EXPOSE 8080
-EXPOSE 8081
 
 
 # Esta fase é usada para compilar o projeto de serviço
