@@ -1,0 +1,108 @@
+trigger:
+- '*'
+
+variables:
+  buildConfiguration: 'Release'
+  realeaseBranchName: 'release'
+  wwwrootDir: 'ContactManagement.Api'
+
+pool: self-hosted
+
+stages:
+  - stage: 'Build'
+    displayName: 'Build'
+    jobs:
+    - job: 'Build'
+      displayName: 'Build Job'
+
+      steps:
+      - task: UseDotNet@2
+        displayName: 'Use .NET SDK 8'
+        inputs:
+          packageType: 'sdk'
+          version: '8.x'
+
+      - script: 'echo "$(Build.DefinitionName), $(Build.BuildId), $(build.BuildNumber)" > buildinfo.txt'
+        workingDirectory: '$(wwwrootDir)'
+
+      - task: DotNetCoreCLI@2
+        displayName: 'Restore project'
+        inputs:
+          command: 'restore'
+          projects: '**/*.csproj'
+
+      - task: DotNetCoreCLI@2
+        displayName: 'Build project'
+        inputs:
+          command: 'build'
+          arguments: '--no-restore --configuration $(buildConfiguration)'
+          projects: '**/*.csproj'
+          
+      - task: DotNetCoreCLI@2
+        displayName: 'Publish project'
+        inputs:
+          command: 'publish'
+          projects: '**/*.csproj'
+          publishWebProjects: false
+          arguments: '--no-build --configuration $(buildConfiguration) --output $(Build.ArtificatStagingDirectory/$(buildConfiguration))'
+          zipAfterPublish: true
+
+      - publish: '$(Build.ArtificatStagingDirectory'
+        artifact: drop
+
+  - stage: 'Development'
+    displayName: 'Deploy Development enviroment'
+    dependsOn: Build
+    condition: succeeded()
+    jobs:
+      - deployment: Deploy
+        environment: development
+        #variables:
+        #  - group: ''
+        strategy:
+          runOnce:
+            deploy:
+             steps:
+               - download: current
+                 artifact: drop
+               - script: |
+                   echo O deploy em Development foi realizado com sucesso.
+                 displayName: 'Deploy into Development'
+                
+  - stage: 'Staging'
+    displayName: 'Deploy Staging enviroment'
+    dependsOn: Development
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/stage')
+    jobs:
+      - deployment: Deploy
+        environment: staging
+        #variables:
+        #  - group: ''
+        strategy:
+          runOnce:
+            deploy:
+             steps:
+               - download: current
+                 artifact: drop
+               - script: |
+                   echo O deploy em Staging foi realizado com sucesso.
+                 displayName: 'Deploy into Staging'
+                 
+  - stage: 'Production'
+    displayName: 'Deploy Production enviroment'
+    dependsOn: Staging
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
+    jobs:
+      - deployment: Deploy
+        environment: production
+        #variables:
+        #  - group: ''
+        strategy:
+          runOnce:
+            deploy:
+             steps:
+               - download: current
+                 artifact: drop
+               - script: |
+                   echo O deploy em Production foi realizado com sucesso.
+                 displayName: 'Deploy into Production'
