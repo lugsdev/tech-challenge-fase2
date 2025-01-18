@@ -2,13 +2,14 @@
 
 # Esta fase é usada durante a execução no VS no modo rápido (Padrão para a configuração de Depuração)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+RUN useradd -m app
 USER app
 WORKDIR /app
-EXPOSE 80
 
-ENV ASPNETCORE_URLS=http://+:80
-ENV ASPNETCORE_ENVIRONMENT=Development
-ENV DOTNET_ENVIRONMENT=Development
+ENV PORT=8081
+ENV ASPNETCORE_URLS=https://+:8081
+
+EXPOSE 8081
 
 
 # Esta fase é usada para compilar o projeto de serviço
