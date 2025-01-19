@@ -1,6 +1,4 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-RUN useradd -m app
-USER app
 WORKDIR /app
 
 ENV PORT=8081
