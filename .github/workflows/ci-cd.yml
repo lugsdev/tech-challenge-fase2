@@ -21,7 +21,7 @@ jobs:
 
       # Executar testes
       - name: Run unit tests
-        run: dotnet test --no-build --configuration Release --collect:"XPlat Code Coverage"
+        run: dotnet test --no-build --configuration Release
         continue-on-error: false
 
       # Login no Docker
