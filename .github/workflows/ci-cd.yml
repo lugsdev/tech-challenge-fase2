@@ -9,6 +9,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      # Configurar a versão automática
+      - name: Set build version
+        id: version
+        run: |
+          # Definir a versão base
+          BASE_VERSION="1.0.0"
+
+          # Obter o número da execução
+          BUILD_NUMBER=${{ github.run_number }}
+
+          # Gerar a nova versão
+          NEW_VERSION="$BASE_VERSION-$BUILD_NUMBER"
+
+          # Exportar a versão como variável de ambiente
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+          echo "New version: $NEW_VERSION"
+
       # Instalar o .NET SDK para os testes
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
@@ -36,5 +53,7 @@ jobs:
         uses: docker/build-push-action@v6.9.0
         with:
           context: .
-          tags: 'zennbyte/api-contactmanager:latest'
+          tags: |
+            zennbyte/api-contactmanager:${{ env.NEW_VERSION }}
+            zennbyte/api-contactmanager:latest
           push: true
