@@ -55,5 +55,4 @@ jobs:
           context: .
           tags: |
             zennbyte/api-contactmanager:${{ env.NEW_VERSION }}
-            zennbyte/api-contactmanager:latest
           push: true
