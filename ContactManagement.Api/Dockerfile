@@ -1,5 +1,5 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-RUN useradd -m app
+RUN id -u app 2>/dev/null || useradd -m app
 USER app
 WORKDIR /app
 
