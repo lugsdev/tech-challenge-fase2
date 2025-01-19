@@ -1,10 +1,7 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 
-ENV PORT=8081
-ENV ASPNETCORE_URLS=https://+:8081
-
-EXPOSE 8081
+EXPOSE 8080
 
 # Esta fase é usada para compilar o projeto de serviço
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
