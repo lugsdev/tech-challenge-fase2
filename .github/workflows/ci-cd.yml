@@ -1,22 +1,40 @@
 name: Fluxo padrão
 on: [push]
+
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout do código
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-            - name: Docker Login 
-              uses: docker/login-action@v3.0.0
-              with:
-                username: 'zennbyte'
-                password: ${{ secrets.DOCKER_PASSWORD }}
+      # Instalar o .NET SDK para os testes
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0' # Versão do .NET SDK
 
-            - name: Build and Push Docker images
-              uses: docker/build-push-action@v6.9.0
-              with:
-                context: .
-                tags: 'zennbyte/api-contactmanager:latest'
-                push: true
-          
+      # Restaurar dependências do .NET
+      - name: Restore dependencies
+        run: dotnet restore
+
+      # Executar testes
+      - name: Run unit tests
+        run: dotnet test --no-build --configuration Release --collect:"XPlat Code Coverage"
+        continue-on-error: false
+
+      # Login no Docker
+      - name: Docker Login 
+        uses: docker/login-action@v3.0.0
+        with:
+          username: 'zennbyte'
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Construir e enviar a imagem Docker
+      - name: Build and Push Docker images
+        uses: docker/build-push-action@v6.9.0
+        with:
+          context: .
+          tags: 'zennbyte/api-contactmanager:latest'
+          push: true

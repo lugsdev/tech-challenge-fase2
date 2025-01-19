@@ -25,6 +25,15 @@
 
     <ItemGroup>
       <None Remove="LOG-2024-10-27.txt" />
+      <None Remove="LOG-2024-10-29.txt" />
+      <None Remove="LOG-2024-10-30.txt" />
+      <None Remove="LOG-2024-11-01.txt" />
+      <None Remove="LOG-2024-11-09.txt" />
+      <None Remove="LOG-2024-11-10.txt" />
+      <None Remove="LOG-2025-01-13.txt" />
+      <None Remove="LOG-2025-01-15.txt" />
+      <None Remove="LOG-2025-01-18.txt" />
+      <None Remove="LOG-2025-01-19.txt" />
     </ItemGroup>
 
 </Project>
