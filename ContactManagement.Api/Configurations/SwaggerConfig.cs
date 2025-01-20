@@ -1,4 +1,5 @@
 ﻿using Microsoft.OpenApi.Models;
+using Prometheus;
 
 namespace ContactManagement.Api.Configurations;
 public static class SwaggerConfig
@@ -43,7 +44,7 @@ public static class SwaggerConfig
     }
     public static void UseSwaggerConfig(this IApplicationBuilder app)
     {
-        app.UseSwagger();
+		app.UseSwagger();
         app.UseSwaggerUI(c =>
         {
             c.SwaggerEndpoint("/swagger/v1/swagger.json", "Contact Management API v1");

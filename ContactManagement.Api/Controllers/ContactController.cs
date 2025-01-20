@@ -96,7 +96,7 @@ public class ContactController : ControllerBase
 	/// </summary>
 	/// <param name="areaCode"></param>
 	/// <returns></returns>
-	[HttpGet("/{areaCode}")]
+	[HttpGet("/{areaCode:int}")]
 	public async Task<ActionResult<IEnumerable<ContactDto>>> GetContactByAreaCode(int areaCode)
 	{
 		var contacts = await _contactServices.GetByAreaCodeAsync(areaCode);

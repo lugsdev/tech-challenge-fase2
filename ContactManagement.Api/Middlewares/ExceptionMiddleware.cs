@@ -1,12 +1,9 @@
 ﻿using ContactManagement.Application.Dtos;
-using Microsoft.AspNetCore.Hosting.Server;
-using System.Net;
 using System.Text.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ContactManagement.Api.Middlewares
 {
-    public class ExceptionMiddleware
+	public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<ExceptionMiddleware> _logger;
