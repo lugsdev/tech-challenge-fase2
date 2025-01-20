@@ -10,9 +10,9 @@ public static class DependencyInjectionConfig
 {
     public static IServiceCollection ResolveDependencies(this IServiceCollection services, IConfiguration configuration)
     {
-        string connectionString = configuration.GetConnectionString("ConnectionLucas");
+		var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-        services.AddTransient<IDbConnection>(db => new SqlConnection(connectionString));
+		services.AddTransient<IDbConnection>(db => new SqlConnection(connectionString));
         services.AddScoped<IContactServices, ContactServices>();
         services.AddScoped<IContactRepository, ContactRepository>();
         services.AddScoped<ITokenService, TokenService>();
