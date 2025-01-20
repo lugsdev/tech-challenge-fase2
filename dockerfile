@@ -1,9 +1,12 @@
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /app
+# Acesse https://aka.ms/customizecontainer para saber como personalizar seu contêiner de depuração e como o Visual Studio usa este Dockerfile para criar suas imagens para uma depuração mais rápida.
 
-ENV PORT=8080
-ENV ASPNETCORE_URLS=http://+:8080
+# Esta fase é usada durante a execução no VS no modo rápido (Padrão para a configuração de Depuração)
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+USER app
+WORKDIR /app
 EXPOSE 8080
+EXPOSE 8081
+
 
 # Esta fase é usada para compilar o projeto de serviço
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
