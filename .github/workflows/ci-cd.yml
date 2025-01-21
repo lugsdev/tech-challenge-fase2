@@ -41,15 +41,17 @@ jobs:
         run: dotnet test ContactManagement.Tests/ContactManagement.Tests.csproj --configuration Release
         continue-on-error: false
 
-       # Testar conexão com o banco de dados
+      # Testar conexão com o banco de dados usando sqlcmd
       - name: Test Database Connection
         env:
           DB_CONNECTION_STRING: ${{ secrets.CONNECTION_STRING }}
         run: |
           echo "Testando conexão com o banco de dados..."
-          dotnet tool install --global dotnet-sql-test
-          export PATH="$PATH:/home/runner/.dotnet/tools"
-          dotnet sql-test --connection-string "$CONNECTION_STRING"
+          sudo apt-get update
+          sudo apt-get install -y mssql-tools unixodbc-dev
+          export PATH="$PATH:/opt/mssql-tools/bin"
+          sqlcmd -S tcp:fiap-lucas.database.windows.net -U ${{ secrets.DB_USER }} -P ${{ secrets.DB_PASSWORD }} -Q "SELECT 1"
+
 
       # Login no Docker
       - name: Docker Login 
