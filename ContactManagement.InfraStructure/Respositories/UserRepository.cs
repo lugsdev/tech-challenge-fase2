@@ -4,33 +4,43 @@ using Dapper;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Data.Common;
 
 namespace ContactManagement.InfraStructure.Respositories
 {
 	public class UserRepository: IUserRepository
     {
-        private readonly IDbConnection _connection;
+        private readonly IConfiguration _configuration;
 
-        public UserRepository(IDbConnection connection)
+        public UserRepository(IConfiguration configuration)
         {
-			_connection = connection;
+            _configuration = configuration;
+        }
+
+        private IDbConnection CreateConnection()
+        {
+            return new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
         }
 
         public async Task<User> GetByUsernameAsync(string username)
         {
             var query = "SELECT * FROM Users WHERE Username = @Username";
 
-            return await _connection.QueryFirstOrDefaultAsync<User>(query, new { Username = username });
+            using (var connection = CreateConnection())
+            {
+                return await connection.QueryFirstOrDefaultAsync<User>(query, new { Username = username });
+            }
         }
 
         public async Task AddAsync(User user)
         {
-            var query = "INSERT INTO Users (Username, Password, SystemPermission) " +
-                                   "VALUES (@Username, @Password, @SystemPermission)";
+            var query = "INSERT INTO Users (Username, Password, SystemPermission) VALUES (@Username, @Password, @SystemPermission)";
 
-            await _connection.ExecuteAsync(query, user);
+            using (var connection = CreateConnection())
+            {
+                await connection.ExecuteAsync(query, user);
+            }
         }
 
+       
     }
 }
