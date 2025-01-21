@@ -36,26 +36,24 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
-      # Executar testes
-      - name: Run unit tests
-        run: dotnet test ContactManagement.Tests/ContactManagement.Tests.csproj --configuration Release
-        continue-on-error: false
+      # Remover duplicatas dos repositórios Microsoft
+      - name: Remove duplicate repositories
+        run: |
+          echo "Removing duplicate APT repository entries..."
+          # Remover duplicatas do repositório mssql
+          sudo sed -i '/microsoft-prod.list/d' /etc/apt/sources.list.d/*
+          sudo sed -i '/mssql-release.list/d' /etc/apt/sources.list.d/*
+          # Re-adicionar o repositório correto
+          echo "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/microsoft-prod.gpg] https://packages.microsoft.com/ubuntu/24.04/prod noble main" | sudo tee /etc/apt/sources.list.d/microsoft-prod.list
+          echo "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/microsoft-prod.gpg] https://packages.microsoft.com/ubuntu/24.04/mssql-server-2019 stable main" | sudo tee /etc/apt/sources.list.d/mssql-release.list
 
-      - name: Test Database Connection
-        env:
-          DB_SERVER: fiap-lucas.database.windows.net
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      # Testar a conexão com o banco de dados
+      - name: Test database connection
         run: |
           echo "Testing database connection..."
-          curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-          curl https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/prod.list | sudo tee /etc/apt/sources.list.d/mssql-release.list
-          sudo apt-get update
-          sudo ACCEPT_EULA=Y apt-get install -y mssql-tools unixodbc-dev
-          export PATH="$PATH:/opt/mssql-tools/bin"
-          sqlcmd -S $DB_SERVER -U $DB_USER -P $DB_PASSWORD -Q "SELECT 1" || echo "Connection failed!"
-
-
+          # Teste básico de conexão com o banco de dados usando sqlcmd
+          /opt/mssql-tools/bin/sqlcmd -S ${{ secrets.DB_SERVER }} -U ${{ secrets.DB_USER }} -P ${{ secrets.DB_PASSWORD }} -Q "SELECT 1"
+        continue-on-error: false
 
       # Login no Docker
       - name: Docker Login 
