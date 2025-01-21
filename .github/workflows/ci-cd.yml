@@ -41,6 +41,16 @@ jobs:
         run: dotnet test ContactManagement.Tests/ContactManagement.Tests.csproj --configuration Release
         continue-on-error: false
 
+       # Testar conexão com o banco de dados
+      - name: Test Database Connection
+        env:
+          DB_CONNECTION_STRING: ${{ secrets.CONNECTION_STRING }}
+        run: |
+          echo "Testando conexão com o banco de dados..."
+          dotnet tool install --global dotnet-sql-test
+          export PATH="$PATH:/home/runner/.dotnet/tools"
+          dotnet sql-test --connection-string "$CONNECTION_STRING"
+
       # Login no Docker
       - name: Docker Login 
         uses: docker/login-action@v3.0.0
