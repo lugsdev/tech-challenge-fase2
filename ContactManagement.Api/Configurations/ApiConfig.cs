@@ -49,8 +49,8 @@ public static class ApiConfig
         app.UseCustomStatusCodePages();
         app.UseHttpsRedirection();
         app.UseCors("Total");
-        app.UseAuthentication();
-        app.UseAuthorization();
+        //app.UseAuthentication();
+        //app.UseAuthorization();
         app.MapControllers();
     }
 

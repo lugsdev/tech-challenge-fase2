@@ -17,6 +17,10 @@ var app = builder.Build();
 
 app.UseRouting();
 
+app.UseAuthentication(); 
+app.UseAuthorization();
+
+
 app.UseEndpoints(endpoints =>
 {
 	endpoints.MapMetrics();  // Esse endpoint será acessado pelo Prometheus
@@ -25,11 +29,5 @@ app.UseEndpoints(endpoints =>
 app.UseApiConfiguration(app.Environment);
 
 app.UseSwaggerConfig();
-
-
-// builder.WebHost.ConfigureKestrel(options =>
-// {
-//     options.ListenAnyIP(8080);
-// });
 
 app.Run();
