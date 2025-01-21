@@ -36,17 +36,6 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
-      # Remover duplicatas dos repositórios Microsoft
-      - name: Remove duplicate repositories
-        run: |
-          echo "Removing duplicate APT repository entries..."
-          # Remover duplicatas do repositório mssql
-          sudo sed -i '/microsoft-prod.list/d' /etc/apt/sources.list.d/*
-          sudo sed -i '/mssql-release.list/d' /etc/apt/sources.list.d/*
-          # Re-adicionar o repositório correto
-          echo "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/microsoft-prod.gpg] https://packages.microsoft.com/ubuntu/24.04/prod noble main" | sudo tee /etc/apt/sources.list.d/microsoft-prod.list
-          echo "deb [arch=amd64,arm64,armhf signed-by=/usr/share/keyrings/microsoft-prod.gpg] https://packages.microsoft.com/ubuntu/24.04/mssql-server-2019 stable main" | sudo tee /etc/apt/sources.list.d/mssql-release.list
-
       # Testar a conexão com o banco de dados
       - name: Test database connection
         run: |
