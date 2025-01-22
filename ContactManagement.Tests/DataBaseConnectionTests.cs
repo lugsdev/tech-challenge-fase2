@@ -12,14 +12,12 @@ namespace ContactManagement.Tests
 		public DatabaseConnectionTests()
 		{
 			var configuration = new ConfigurationBuilder()
-				.SetBasePath(AppContext.BaseDirectory)
+				.SetBasePath(Path.Combine(AppContext.BaseDirectory, "..", "..", "ContactManagement.Api"))
 				.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
 				.Build();
 
 			_connectionString = configuration.GetConnectionString("DefaultConnection")
 							   ?? throw new InvalidOperationException("String de conexão não encontrada.");
-
-			Console.WriteLine($"Conectando com a string: {_connectionString}");
 		}
 
 		[Fact]
