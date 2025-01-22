@@ -38,7 +38,10 @@ jobs:
 
       # Executar testes
       - name: Run unit tests
-        run: dotnet test ContactManagement.Tests/ContactManagement.Tests.csproj --configuration Release
+        env:
+          DB_CONNECTION_STRING: ${{ secrets.DB_CONNECTION }}
+        run: |
+          dotnet test ContactManagement.Tests/ContactManagement.Tests.csproj --configuration Release
         continue-on-error: false
 
       # Login no Docker
