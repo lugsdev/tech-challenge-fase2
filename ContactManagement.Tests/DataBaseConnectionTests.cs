@@ -18,6 +18,8 @@ namespace ContactManagement.Tests
 
 			_connectionString = configuration.GetConnectionString("DefaultConnection")
 							   ?? throw new InvalidOperationException("String de conexão não encontrada.");
+
+			Console.WriteLine($"Conectando com a string: {_connectionString}");
 		}
 
 		[Fact]
@@ -44,7 +46,6 @@ namespace ContactManagement.Tests
 			{
 				Console.WriteLine($"Erro ao conectar ao banco de dados: {ex.Message}");
 				Console.WriteLine($"Detalhes do erro: {ex.StackTrace}");
-				Console.WriteLine($"Conectando com a string: {_connectionString}");
 
 				return false;
 			}
