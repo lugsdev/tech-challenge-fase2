@@ -11,13 +11,7 @@ namespace ContactManagement.Tests
 
 		public DatabaseConnectionTests()
 		{
-			var configuration = new ConfigurationBuilder()
-				.SetBasePath(Path.Combine(AppContext.BaseDirectory, "..", "..", "ContactManagement.Api"))
-				.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-				.Build();
-
-			_connectionString = configuration.GetConnectionString("DefaultConnection")
-							   ?? throw new InvalidOperationException("String de conexão não encontrada.");
+			_connectionString = "Server=fiap-lucas.database.windows.net;Database=ContactManagment;User Id=dbapp;Password=Fiap@2025;";
 		}
 
 		[Fact]
