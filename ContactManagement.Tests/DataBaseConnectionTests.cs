@@ -27,7 +27,7 @@ namespace ContactManagement.Tests
 			bool result = TestConnection();
 
 			// Validar o resultado
-			Assert.True(result, "Não foi possível conectar ao banco de dados.");
+			Assert.True(result, "Não foi possível conectar ao banco de dados");
 		}
 
 		public bool TestConnection()
@@ -43,6 +43,7 @@ namespace ContactManagement.Tests
 			catch (Exception ex)
 			{
 				Console.WriteLine($"Erro ao conectar ao banco de dados: {ex.Message}");
+				Console.WriteLine($"Detalhes do erro: {ex.StackTrace}");
 				return false;
 			}
 		}
