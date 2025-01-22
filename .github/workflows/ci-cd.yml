@@ -36,6 +36,11 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
+      # Executar testes
+      - name: Run unit tests
+        run: dotnet test ContactManagement.Tests/ContactManagement.Tests.csproj --configuration Release
+        continue-on-error: false
+
       # Login no Docker
       - name: Docker Login 
         uses: docker/login-action@v3.0.0
